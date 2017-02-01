@@ -1,0 +1,29 @@
+---
+- name: Install rpi packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - build-essential
+    - git
+    - htop
+    - man-db
+    - picocom
+
+- name: Install power button monitor
+  include: power.yml
+  when: rpi_power
+
+- name: Configure wifi client
+  include: wifi-client.yml
+  when: rpi_wifi_client
+
+- name: Configure serial port
+  include: serial.yml
+  when: rpi_serial
+
+- name: Install Node-RED
+  include: nodered.yml
+  when: rpi_nodered
